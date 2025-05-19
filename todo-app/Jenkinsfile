@@ -1,0 +1,40 @@
+pipeline {
+    agent any   // Runs on any available Jenkins agent
+
+    stages {
+        stage('Clone Code') {
+            steps {
+                git 'https://github.com/deviprasannakakaraparthi/todo-app.git'  // Pulls latest code
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker-compose build'  // Builds Node.js app container
+            }
+        }
+
+        stage('Start Services') {
+            steps {
+                sh 'docker-compose up -d'  // Starts containers in detached mode
+            }
+        }
+
+        stage('Health Check') {
+            steps {
+                sh 'sleep 10'  // Wait for app to start
+                sh 'curl --fail http://localhost:3000 || exit 1'  // Basic health check
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Deployment successful!'
+        }
+        failure {
+            echo 'Deployment failed.'
+        }
+    }
+}
+
