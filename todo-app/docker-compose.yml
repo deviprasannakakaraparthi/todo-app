@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   backend:
     build: ./backend
@@ -9,11 +11,11 @@ services:
       - MONGO_URI=mongodb://mongo:27017/tododb
 
   mongo:
-    image:mongo
+    image: mongo
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
 
-  volumes:
-    mongo-data:
+volumes:
+  mongo-data:
